@@ -1,19 +1,15 @@
-import React from "react";
-import { Button } from "../../components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
 import { useForm } from "react-hook-form";
 import { LoginSchemas } from "../../schemas/loginSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "../../components/ui/form";
 import { z } from "zod";
 import AuthForm from "../../components/auth/AuthForm";
+import { useMutation } from "@tanstack/react-query";
+import { signIn } from "../../api/auth";
+import AuthCard from "../../components/auth/AuthCard";
+import { LoginFormFields } from "../../lib/utils";
+import AuthHeader from "../../components/auth/AuthHeader";
+import AuthContent from "../../components/auth/AuthContent";
 
 const Login = () => {
   const form = useForm<z.infer<typeof LoginSchemas>>({
@@ -24,33 +20,39 @@ const Login = () => {
     },
   });
 
+  const { mutate: LoginMutate } = useMutation({
+    mutationFn: (data: z.infer<typeof LoginSchemas>) => signIn(data),
+    onSuccess: (res) => {
+      console.log(res);
+    },
+  });
+
   const onSubmit = (value: z.infer<typeof LoginSchemas>) => {
-    console.log(value);
+    LoginMutate(value);
   };
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center">
-      <Card className="w-[350px]">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <CardHeader>
-              <CardTitle>Create project</CardTitle>
-              <CardDescription>
-                Deploy your new project in one-click.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <AuthForm control={form.control} />
-            </CardContent>
-            <CardFooter className="flex justify-between w-full">
-              <Button type="submit" className="w-full">
-                Deploy
-              </Button>
-            </CardFooter>
-          </form>
-        </Form>
-      </Card>
-    </div>
+    <AuthCard>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1">
+          <AuthHeader
+            desc="Enter your email and password to login"
+            title="Sign In"
+          />
+
+          <AuthContent
+            href="/register"
+            labelHref="Don't have account?"
+            labelSubmit="SigIn"
+          >
+            <AuthForm
+              controlLogin={form.control}
+              FormFields={LoginFormFields}
+            />
+          </AuthContent>
+        </form>
+      </Form>
+    </AuthCard>
   );
 };
 

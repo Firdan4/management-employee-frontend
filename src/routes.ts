@@ -1,4 +1,5 @@
 import Login from "./page/auth/Login";
+import Register from "./page/auth/Register";
 import Home from "./page/Home";
 import NotFound from "./page/NotFound";
 
@@ -17,5 +18,9 @@ export const publicRoutes = [
   {
     path: "/login",
     element: Login,
+  },
+  {
+    path: "/register",
+    element: Register,
   },
 ];
