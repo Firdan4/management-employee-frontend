@@ -12,6 +12,7 @@ import { Form } from "../../components/ui/form";
 import { useMutation } from "@tanstack/react-query";
 import { signUp } from "../../api/auth";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../components/Loading";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const Register = () => {
     },
   });
 
-  const { mutate: RegisterMutate } = useMutation({
+  const { mutate: RegisterMutate, isPending } = useMutation({
     mutationFn: (data: z.infer<typeof RegisterSchemas>) => signUp(data),
     onSuccess: () => {
       navigate("/login");
@@ -38,24 +39,27 @@ const Register = () => {
   };
 
   return (
-    <AuthCard>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1">
-          <AuthHeader desc="Enter your data to register" title="Sign Up" />
+    <>
+      {isPending && <Loading />}
+      <AuthCard>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1">
+            <AuthHeader desc="Enter your data to register" title="Sign Up" />
 
-          <AuthContent
-            href="/login"
-            labelHref="Already have account?"
-            labelSubmit="Sign Up"
-          >
-            <AuthForm
-              controlRegister={form.control}
-              FormFields={RegisterFormFields}
-            />
-          </AuthContent>
-        </form>
-      </Form>
-    </AuthCard>
+            <AuthContent
+              href="/login"
+              labelHref="Already have account?"
+              labelSubmit="Sign Up"
+            >
+              <AuthForm
+                controlRegister={form.control}
+                FormFields={RegisterFormFields}
+              />
+            </AuthContent>
+          </form>
+        </Form>
+      </AuthCard>
+    </>
   );
 };
 
