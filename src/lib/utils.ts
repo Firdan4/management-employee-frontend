@@ -18,6 +18,12 @@ export interface FormFieldRegisterType
 
 export type FormFieldsType = FormFieldLoginType | FormFieldRegisterType;
 
+export interface FormFieldEmployeeType {
+  name: "name" | "position" | "status";
+  label: string;
+  type: string;
+}
+
 export const LoginFormFields: FormFieldLoginType[] = [
   // { name: "firstName", label: "First Name", type: "text" },
   // { name: "lastName", label: "Last Name", type: "text" },
@@ -30,4 +36,9 @@ export const RegisterFormFields: FormFieldRegisterType[] = [
   { name: "lastName", label: "Last Name", type: "text" },
   { name: "email", label: "Email", type: "email" },
   { name: "password", label: "Password", type: "password" },
+];
+export const EmployeeFormFields: FormFieldEmployeeType[] = [
+  { name: "name", label: "Name", type: "text" },
+  { name: "position", label: "Position", type: "text" },
+  { name: "status", label: "Status", type: "email" },
 ];
